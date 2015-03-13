@@ -195,7 +195,7 @@ return _.filter(collection, function(element){
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
     var result;
-        
+
     if(accumulator){
       result = accumulator;
       for(var i=0; i < collection.length; i++)
