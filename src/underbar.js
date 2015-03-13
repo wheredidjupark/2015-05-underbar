@@ -106,6 +106,13 @@
       }
     };
 */
+return _.filter(collection, function(element){
+  if(test(element)){
+    return false;
+  } else {
+    return true;
+  }
+})
 
   };
 
@@ -187,11 +194,23 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-    var result = accumulator || null;
+    var result;
+        
+    if(accumulator){
+      result = accumulator;
+      for(var i=0; i < collection.length; i++)
+      {
+        result = iterator(result,collection[i]);
+      }
+  } else{
+      accumulator = collection[0];
+      result = accumulator;
+        for(var i=1; i < collection.length; i++){
+    result = iterator(result,collection[i]);
+    }
+  }
 
-for(var i=0; i < collection.length; i++){
-      result = iterator(result,collection[i]);
-}
+
 return result;
 
 
