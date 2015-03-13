@@ -81,16 +81,57 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+    var passed = [];
+    for(var i=0, length=collection.length; i < length; i++){
+      if(test(collection[i])){
+        passed.push(collection[i]);
+      }
+    }
+
+    return passed;
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+
+    /*
+    return this.filter(collection, function(element){
+      if(test(element)){
+        return false;
+      }
+      else{
+        return true;
+      }
+    };
+*/
+
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    var result = [];
+    result.push(array[0]);
+
+    for(var i=0; i < array.length; i++)
+    {
+      var isRepeat = false;
+      for(var j=i; j< array.length; j++)
+      {
+        for(var k=0; k < result.length ; k++)
+        {
+          if(result[k] === array[j]){
+            isRepeat = true;
+          }
+        }
+        if(!isRepeat){
+          result.push(array[j]);
+        }
+      }
+    }
+
+    return result;
   };
 
 
@@ -99,6 +140,12 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    var mapped = [];
+    for(var i=0; i < collection.length; i++){
+      mapped.push(iterator(collection[i]));
+    }
+    return mapped;
+
   };
 
   /*
@@ -140,6 +187,14 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    var result = accumulator || null;
+
+for(var i=0; i < collection.length; i++){
+      result = iterator(result,collection[i]);
+}
+return result;
+
+
   };
 
   // Determine if the array or object contains a given value (using `===`).
