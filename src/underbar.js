@@ -196,7 +196,7 @@ return _.filter(collection, function(element){
   _.reduce = function(collection, iterator, accumulator) {
     var result;
 
-    if(typeof(accumulator)!=="undefined" ){
+    if(accumulator!== undefined ){
       result = accumulator;
       for(var i=0; i < collection.length; i++)
       {
@@ -229,14 +229,6 @@ return result;
     }, false);
 */
 
-/*
-    for(var i=0; i < collection.length; i++){
-        if(collection[i]===target){
-            return true;
-        }
-    }
-    return false;*/
-
     for(var key in collection){
       if(collection[key] === target){
         return true;
@@ -253,16 +245,6 @@ if(collection.length === 0 || collection === undefined )
 {
   return true;
 }
-
-/*
-    for(var i=0; i < collection.length; i++){
-      var isTrue = (iterator(collection[i])) || true;
-      if(!isTrue){
-        return false;
-      }
-    }
-    return true;
-    */
 
     for(var i=0; i < collection.length; i++)
     {
@@ -385,7 +367,29 @@ for(var i=1; i < arguments.length; i++){
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-  };
+
+/*
+    var memo = {};
+    return function(){
+      var key = arguments.join(",");
+      if(memo[key] === undefined)
+        memo[key] = func.apply(this, arguments);
+      }
+
+      return memo[key];
+    }*/
+       var results = {};
+
+    return function(){
+      var serialization = JSON.stringify(arguments);
+      if (!(serialization in results)){
+        results[serialization] = func.apply(null, arguments);
+      }
+      return results[serialization];
+
+    };
+
+   };
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -428,9 +432,12 @@ for(var i=1; i < arguments.length; i++){
         usedIndices.push(index);
       }
     }
+    //check if the shuffle results in the same order
+    if(result === array){
+      _.shuffle(result);
+    }
+
     return result;
-
-
 
   };
 
@@ -461,6 +468,7 @@ for(var i=1; i < arguments.length; i++){
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
+
   };
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
