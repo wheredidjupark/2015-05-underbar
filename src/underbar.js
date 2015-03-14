@@ -196,7 +196,7 @@ return _.filter(collection, function(element){
   _.reduce = function(collection, iterator, accumulator) {
     var result;
 
-    if(accumulator){
+    if(typeof(accumulator)!=="undefined" ){
       result = accumulator;
       for(var i=0; i < collection.length; i++)
       {
@@ -220,21 +220,40 @@ return result;
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
+    /*
     return _.reduce(collection, function(wasFound, item) {
       if (wasFound) {
         return true;
       }
       return item === target;
     }, false);
+*/
+
+/*
+    for(var i=0; i < collection.length; i++){
+        if(collection[i]===target){
+            return true;
+        }
+    }
+    return false;*/
+
+    for(var key in collection){
+      if(collection[key] === target){
+        return true;
+      }
+    }
+    return false;
   };
 
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-if(collection.length === 0 || collection === undefined){
+if(collection.length === 0 || collection === undefined )
+{
   return true;
 }
+
 /*
     for(var i=0; i < collection.length; i++){
       var isTrue = (iterator(collection[i])) || true;
@@ -295,11 +314,34 @@ if(collection.length === 0 || collection === undefined){
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+
+for(var i=1; i < arguments.length; i++){
+      for(var key in arguments[i])
+      {
+        obj[key] = arguments[i][key];
+      }
+
+}
+      return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+
+for(var i=1; i < arguments.length; i++){
+
+      for(var key in arguments[i])
+      {
+        if(typeof(obj[key]) === "undefined" )
+        {
+          obj[key] = arguments[i][key];
+        }
+    }
+}
+
+    return obj;
+
   };
 
 
@@ -352,6 +394,14 @@ if(collection.length === 0 || collection === undefined){
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var param = [];
+    for(var i=2; i < arguments.length; i++){
+      param.push(arguments[i]);
+    }
+
+    return setTimeout(function(){
+      func.apply(this, param);
+    },wait);
   };
 
 
@@ -366,6 +416,22 @@ if(collection.length === 0 || collection === undefined){
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var usedIndices = [];
+    var result = [];
+
+    while(result.length < array.length)
+    {
+      var index = Math.floor(Math.random()*array.length);
+      if(!_.contains(usedIndices, index))
+      {
+        result.push(array[index]);
+        usedIndices.push(index);
+      }
+    }
+    return result;
+
+
+
   };
 
 
