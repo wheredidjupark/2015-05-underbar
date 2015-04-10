@@ -194,6 +194,7 @@ return _.filter(collection, function(element){
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    
     var result;
 
     if(accumulator!== undefined ){
@@ -220,32 +221,45 @@ return result;
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
-    
+    /*
     return _.reduce(collection, function(wasFound, item) {
       if (wasFound) {
         return true;
       }
       return item === target;
     }, false);
+*/
 
 
-/*
     for(var key in collection){
       if(collection[key] === target){
         return true;
       }
     }
     return false;
-    */
+    
   };
 
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-if(collection.length === 0 || collection === undefined )
+
+    if (!iterator) { iterator = _.identity; }
+      return _.reduce(collection, function(passed, elem) {
+        if (!passed) {
+          return false;
+        } 
+        if (!iterator(elem)) {
+          return false;
+        }
+        return true;
+    }, true);
+/*
+    
+if(!(collection.length === 0 || collection === undefined) &&(!Boolean(iterator)) )
 {
-  return true;
+  return false;
 }
 
     for(var i=0; i < collection.length; i++)
@@ -255,12 +269,17 @@ if(collection.length === 0 || collection === undefined )
       }
     }
     return true;
+    */
+    
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+
+
+/*
     if(collection.length === 0 || collection === undefined){
       return false;
     }
@@ -271,11 +290,17 @@ if(collection.length === 0 || collection === undefined )
         return true;
       }
     }
-    if(!iterator){
-      return true;
-    }
+
 
     return false;
+    */
+
+    if (iterator === undefined) {
+      iterator = _.identity;
+    }
+      return !_.every(collection, function(element){
+      return !iterator(element);
+    })
   };
 
 
@@ -436,7 +461,7 @@ for(var i=1; i < arguments.length; i++){
     }
     //check if the shuffle results in the same order
     if(result === array){
-      _.shuffle(result);
+      result = _.shuffle(result);
     }
 
     return result;
