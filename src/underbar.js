@@ -195,25 +195,11 @@ return _.filter(collection, function(element){
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
     
-    var result;
-
-    if(accumulator!== undefined ){
-      result = accumulator;
-      for(var i=0; i < collection.length; i++)
-      {
-        result = iterator(result,collection[i]);
-      }
-  } else{
-      accumulator = collection[0];
-      result = accumulator;
-        for(var i=1; i < collection.length; i++){
-    result = iterator(result,collection[i]);
-    }
-  }
-
-
-return result;
-
+ _.each(collection, function(item) {
+    accumulator === undefined ? accumulator = item : accumulator = iterator(accumulator, item);
+    });
+    
+  return accumulator;
 
   };
 
@@ -221,23 +207,23 @@ return result;
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
-    /*
+    
     return _.reduce(collection, function(wasFound, item) {
       if (wasFound) {
         return true;
       }
       return item === target;
     }, false);
-*/
 
 
+/*
     for(var key in collection){
       if(collection[key] === target){
         return true;
       }
     }
     return false;
-    
+    */
   };
 
 
@@ -245,8 +231,11 @@ return result;
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
 
-    if (!iterator) { iterator = _.identity; }
-      return _.reduce(collection, function(passed, elem) {
+    if (iterator === undefined)  {
+     iterator = _.identity; 
+   }
+
+    return _.reduce(collection, function(passed, elem) {
         if (!passed) {
           return false;
         } 
